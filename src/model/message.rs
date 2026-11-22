@@ -12,7 +12,7 @@ pub enum MessageType {
 }
 
 /// A provider-neutral conversation message.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Message {
     pub mtype: MessageType,
     pub blocks: Vec<Block>,
@@ -77,17 +77,18 @@ impl Message {
 }
 
 /// One content block inside a message.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Block {
     Text(TextBlock),
     Image(ImageBlock),
     Reasoning(ReasoningBlock),
     ToolCall(ToolCallBlock),
     ToolResult(ToolResultBlock),
+    Opaque(Opaque),
 }
 
 /// Visible text.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct TextBlock {
     pub text: String,
     pub opaque: Option<Opaque>,
@@ -108,25 +109,26 @@ pub enum ImageSource {
 }
 
 /// Reasoning or thinking output.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ReasoningBlock {
     pub text: String,
     pub opaque: Option<Opaque>,
 }
 
 /// A tool call requested by the model.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ToolCallBlock {
     pub id: String,
     pub name: String,
     pub args: Value,
     pub raw_args: Option<String>,
+    pub args_error: Option<String>,
     pub provider_item_id: Option<String>,
     pub opaque: Option<Opaque>,
 }
 
 /// The result of one tool call.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ToolResultBlock {
     pub call_id: String,
     pub name: String,
@@ -152,13 +154,52 @@ pub struct Opaque {
 }
 
 /// Token counts for one model call. Input and cache counts are disjoint.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+/// `None` means the provider did not report the field; `Some(0)` means zero.
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub struct Usage {
-    pub input_tokens: u64,
-    pub output_tokens: u64,
+    pub input_tokens: Option<u64>,
+    pub output_tokens: Option<u64>,
     pub cache_read_tokens: Option<u64>,
     pub cache_write_tokens: Option<u64>,
     pub reasoning_tokens: Option<u64>,
+    pub total_tokens: Option<u64>,
+    pub cost: Option<f64>,
+}
+
+impl Usage {
+    pub fn merge(&mut self, update: Usage) {
+        if update.input_tokens.is_some() {
+            self.input_tokens = update.input_tokens;
+        }
+        if update.output_tokens.is_some() {
+            self.output_tokens = update.output_tokens;
+        }
+        if update.cache_read_tokens.is_some() {
+            self.cache_read_tokens = update.cache_read_tokens;
+        }
+        if update.cache_write_tokens.is_some() {
+            self.cache_write_tokens = update.cache_write_tokens;
+        }
+        if update.reasoning_tokens.is_some() {
+            self.reasoning_tokens = update.reasoning_tokens;
+        }
+        if update.total_tokens.is_some() {
+            self.total_tokens = update.total_tokens;
+        }
+        if update.cost.is_some() {
+            self.cost = update.cost;
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.input_tokens.is_none()
+            && self.output_tokens.is_none()
+            && self.cache_read_tokens.is_none()
+            && self.cache_write_tokens.is_none()
+            && self.reasoning_tokens.is_none()
+            && self.total_tokens.is_none()
+            && self.cost.is_none()
+    }
 }
 
 /// Provider-neutral finish reason.
@@ -171,15 +212,16 @@ pub enum StopReason {
     ContentFilter,
     Refusal,
     Pause,
+    Aborted,
     Other(String),
 }
 
 /// Response metadata for an assistant message.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AssistantMeta {
     pub origin: Origin,
     pub response_id: Option<String>,
-    pub stop_reason: StopReason,
+    pub stop_reason: Option<StopReason>,
     pub usage: Option<Usage>,
     pub opaque: Option<Opaque>,
 }
