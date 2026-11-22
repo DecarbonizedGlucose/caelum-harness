@@ -1,0 +1,32 @@
+{
+  "id": "85ff6157-0ad5-4fd2-b278-42379d68f468",
+  "object": "chat.completion",
+  "created": 1795277472,
+  "model": "deepseek-flash",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "51",
+        "reasoning_content": "We need answer only number. 17*3=51."
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 44,
+    "completion_tokens": 15,
+    "total_tokens": 59,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 13
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 44
+  },
+  "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+}

@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "We need answer only number. 17*3=51.",
+            "thought": true,
+            "thoughtSignature": "gemini-thought-signature-1"
+          },
+          { "text": "51" }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP"
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 44,
+    "candidatesTokenCount": 15,
+    "thoughtsTokenCount": 13,
+    "totalTokenCount": 72
+  },
+  "modelVersion": "gemini-2.5-flash",
+  "responseId": "gemini-fixture-thinking"
+}

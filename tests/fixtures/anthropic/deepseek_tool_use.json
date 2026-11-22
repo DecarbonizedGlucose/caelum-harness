@@ -1,0 +1,25 @@
+{
+  "id": "5a0ed090-6ac1-4caa-a273-32d84cd14ec3",
+  "type": "message",
+  "role": "assistant",
+  "model": "deepseek-flash",
+  "content": [
+    {
+      "type": "tool_use",
+      "id": "call_00_UcEOFm5O0gT7jfxB3tdM3328",
+      "name": "get_weather",
+      "input": {
+        "city": "Paris"
+      }
+    }
+  ],
+  "stop_reason": "tool_use",
+  "stop_sequence": null,
+  "usage": {
+    "input_tokens": 155,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 128,
+    "output_tokens": 33,
+    "service_tier": "standard"
+  }
+}

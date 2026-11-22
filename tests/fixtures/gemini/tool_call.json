@@ -1,0 +1,26 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "name": "get_weather",
+              "args": { "city": "Paris" },
+              "id": "gemini-call-1"
+            }
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP"
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 77,
+    "candidatesTokenCount": 12,
+    "totalTokenCount": 89
+  },
+  "modelVersion": "gemini-2.5-flash",
+  "responseId": "gemini-fixture-tool"
+}

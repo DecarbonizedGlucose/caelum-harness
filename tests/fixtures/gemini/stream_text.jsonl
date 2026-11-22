@@ -1,0 +1,2 @@
+{"candidates":[{"content":{"parts":[{"text":"Hello "}],"role":"model"}}]}
+{"candidates":[{"content":{"parts":[{"text":"world"}],"role":"model"},"finishReason":"STOP"}],"usageMetadata":{"promptTokenCount":5,"candidatesTokenCount":2,"totalTokenCount":7}}

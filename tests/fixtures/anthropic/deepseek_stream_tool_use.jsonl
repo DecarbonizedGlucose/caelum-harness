@@ -1,0 +1,13 @@
+{"type":"message_start","message":{"id":"c80efc5d-74fc-4ee0-b911-40c65a549fe2","type":"message","role":"assistant","model":"deepseek-flash","content":[],"stop_reason":null,"stop_sequence":null,"usage":{"input_tokens":155,"cache_creation_input_tokens":0,"cache_read_input_tokens":128,"output_tokens":0,"service_tier":"standard"}}}
+{"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"call_00_SVjPYHe5Fh9WVvFzE7RU4151","name":"get_weather","input":{}}}
+{"type":"ping"}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\""}}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"city"}}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\""}}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":": \""}}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"Paris"}}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\""}}
+{"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"}"}}
+{"type":"content_block_stop","index":0}
+{"type":"message_delta","delta":{"stop_reason":"tool_use","stop_sequence":null},"usage":{"input_tokens":155,"cache_creation_input_tokens":0,"cache_read_input_tokens":128,"output_tokens":33,"service_tier":"standard"}}
+{"type":"message_stop"}
