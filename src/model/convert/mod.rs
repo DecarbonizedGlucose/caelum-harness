@@ -8,6 +8,7 @@ use crate::model::stream::StreamEvent;
 pub mod anthropic;
 pub mod error;
 pub mod openai_chat;
+pub mod openai_responses;
 pub(crate) mod util;
 
 /// Provider-neutral codec for one wire protocol.
