@@ -1,8 +1,66 @@
-use serde_json::{Map, Value};
+use serde_json::{Map, Value, json};
 
 use crate::error::HarnessError;
 use crate::model::message::ImageSource;
 use crate::model::protocol::Protocol;
+
+pub(crate) fn is_done_payload(payload: &str) -> bool {
+    payload.trim() == "[DONE]"
+}
+
+/// Parses tool arguments from a string or object into a JSON object.
+pub(crate) fn decode_tool_arguments(
+    value: &Value,
+) -> Result<(Value, Option<String>, Option<String>), HarnessError> {
+    match value {
+        Value::String(raw) => {
+            if raw.trim().is_empty() {
+                return Ok((json!({}), Some("{}".to_string()), None));
+            }
+            Ok(match serde_json::from_str::<Value>(raw) {
+                Ok(value) if value.is_object() => (value, Some(raw.clone()), None),
+                Ok(_) => (
+                    Value::Null,
+                    Some(raw.clone()),
+                    Some("tool arguments must be a JSON object".to_string()),
+                ),
+                Err(error) => (Value::Null, Some(raw.clone()), Some(error.to_string())),
+            })
+        }
+        Value::Object(_) => {
+            let raw = serde_json::to_string(value).map_err(|error| {
+                HarnessError::internal(format!("could not serialize tool arguments: {error}"))
+            })?;
+            Ok((value.clone(), Some(raw), None))
+        }
+        Value::Null => Ok((json!({}), None, None)),
+        _ => Ok((
+            Value::Null,
+            None,
+            Some("tool arguments must be a JSON object or string".to_string()),
+        )),
+    }
+}
+
+/// Encodes tool arguments as the JSON string expected by OpenAI-style protocols.
+pub(crate) fn encode_tool_arguments(
+    args: &Value,
+    raw_args: Option<&str>,
+    args_error: Option<&str>,
+) -> Result<String, HarnessError> {
+    if args_error.is_some() {
+        return Ok("{}".to_string());
+    }
+    if let Some(raw) = raw_args.filter(|raw| !raw.trim().is_empty()) {
+        return Ok(raw.to_string());
+    }
+    if args.is_null() {
+        return Ok("{}".to_string());
+    }
+    serde_json::to_string(args).map_err(|error| {
+        HarnessError::internal(format!("could not serialize tool arguments: {error}"))
+    })
+}
 
 pub(crate) fn as_object<'a>(
     value: &'a Value,

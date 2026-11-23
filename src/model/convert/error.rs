@@ -36,9 +36,15 @@ pub(crate) fn provider_error(
         code_text.as_str(),
     ]
     .join(" ")
-    .to_lowercase();
+    .to_lowercase()
+    .replace(['_', '-'], " ");
 
-    let error_code = if status == Some(429)
+    let error_code = if detail.contains("content policy")
+        || detail.contains("content filter")
+        || detail.contains("moderation")
+    {
+        ErrorCode::ContentFilter
+    } else if status == Some(429)
         || detail.contains("rate limit")
         || detail.contains("too many requests")
     {

@@ -204,6 +204,9 @@ impl AnthropicStream {
 
 impl StreamDecoder for AnthropicStream {
     fn push(&mut self, payload: &str) -> Result<Vec<StreamEvent>, HarnessError> {
+        if crate::model::convert::util::is_done_payload(payload) {
+            return Ok(Vec::new());
+        }
         let events = self.parse_event(payload)?;
         for event in &events {
             self.assembler.push(event.clone())?;

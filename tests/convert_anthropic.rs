@@ -671,3 +671,11 @@ fn filters_empty_text_inside_tool_result() {
     let body = codec().encode_request(&request, false).expect("request");
     assert_eq!(body["messages"][2]["content"][0]["content"], json!([]));
 }
+
+#[test]
+fn done_marker_is_ignored() {
+    let codec = codec();
+    let mut decoder = codec.stream_decoder();
+    let events = decoder.push("[DONE]").expect("done marker");
+    assert!(events.is_empty());
+}

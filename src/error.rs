@@ -121,6 +121,14 @@ impl HarnessError {
         )
     }
 
+    pub fn unsupported_option(protocol: Protocol, option: impl Into<String>) -> Self {
+        let option = option.into();
+        Self::new(
+            ErrorCode::UnsupportedOption,
+            format!("{protocol} does not support option `{option}`"),
+        )
+    }
+
     pub fn empty_response(protocol: Protocol) -> Self {
         Self::new(
             ErrorCode::EmptyResponse,

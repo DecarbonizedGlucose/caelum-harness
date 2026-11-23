@@ -199,18 +199,11 @@ fn encode_assistant(
                 }
             }
             Block::ToolCall(call) => {
-                let arguments = if call.args_error.is_some() {
-                    "{}".to_string()
-                } else {
-                    match &call.raw_args {
-                        Some(raw) => raw.clone(),
-                        None => serde_json::to_string(&call.args).map_err(|error| {
-                            HarnessError::internal(format!(
-                                "could not serialize tool arguments: {error}"
-                            ))
-                        })?,
-                    }
-                };
+                let arguments = crate::model::convert::util::encode_tool_arguments(
+                    &call.args,
+                    call.raw_args.as_deref(),
+                    call.args_error.as_deref(),
+                )?;
                 tool_calls.push(wire::RequestToolCall {
                     id: call.id.clone(),
                     kind: "function",

@@ -150,28 +150,8 @@ fn decode_tool_call(call: &wire::ToolCall) -> Result<ToolCallBlock, HarnessError
         ));
     }
 
-    let (args, raw_args, args_error) = match &call.function.arguments {
-        Value::String(raw) => match serde_json::from_str::<Value>(raw) {
-            Ok(value) if value.is_object() => (value, Some(raw.clone()), None),
-            Ok(_) => (
-                Value::Null,
-                Some(raw.clone()),
-                Some("tool arguments must be a JSON object".to_string()),
-            ),
-            Err(error) => (Value::Null, Some(raw.clone()), Some(error.to_string())),
-        },
-        Value::Object(_) => {
-            let raw = serde_json::to_string(&call.function.arguments).map_err(|error| {
-                HarnessError::internal(format!("could not serialize tool arguments: {error}"))
-            })?;
-            (call.function.arguments.clone(), Some(raw), None)
-        }
-        _ => (
-            Value::Null,
-            None,
-            Some("tool arguments must be a JSON object or string".to_string()),
-        ),
-    };
+    let (args, raw_args, args_error) =
+        crate::model::convert::util::decode_tool_arguments(&call.function.arguments)?;
 
     Ok(ToolCallBlock {
         id: call.id.clone(),

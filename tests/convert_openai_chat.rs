@@ -921,3 +921,11 @@ fn deepseek_preset_replays_reasoning() {
     let body = codec().encode_request(&request, false).expect("request");
     assert_eq!(body["messages"][1]["reasoning_content"], "previous thought");
 }
+
+#[test]
+fn done_marker_is_ignored() {
+    let codec = codec();
+    let mut decoder = codec.stream_decoder();
+    let events = decoder.push("[DONE]").expect("done marker");
+    assert!(events.is_empty());
+}
