@@ -5,6 +5,7 @@ use crate::model::message::{Message, Origin};
 use crate::model::protocol::ChatRequest;
 use crate::model::stream::StreamEvent;
 
+pub mod anthropic;
 pub mod error;
 pub mod openai_chat;
 pub(crate) mod util;
