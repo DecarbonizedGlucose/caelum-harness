@@ -9,7 +9,7 @@ use crate::model::message::Message;
 pub enum Protocol {
     OpenaiChat,
     OpenaiResp,
-    Gemini,
+    GeminiGenerateContent,
     Anthropic,
     Unknown,
 }
@@ -19,7 +19,7 @@ impl fmt::Display for Protocol {
         f.write_str(match self {
             Self::OpenaiChat => "OpenAI Chat",
             Self::OpenaiResp => "OpenAI Responses",
-            Self::Gemini => "Gemini",
+            Self::GeminiGenerateContent => "Gemini GenerateContent",
             Self::Anthropic => "Anthropic",
             Self::Unknown => "Unknown protocol",
         })

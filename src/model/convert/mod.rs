@@ -7,6 +7,7 @@ use crate::model::stream::StreamEvent;
 
 pub mod anthropic;
 pub mod error;
+pub mod gemini_generate_content;
 pub mod openai_chat;
 pub mod openai_responses;
 pub(crate) mod util;
